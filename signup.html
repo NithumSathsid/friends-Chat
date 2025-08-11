@@ -1,7 +1,11 @@
 <!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Signup - Friends Chat</title>
-<link rel="stylesheet" href="style.css"></head>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Sign Up - Friends Chat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
   <main class="auth-page">
     <h2>Create account</h2>
@@ -9,11 +13,36 @@
       <input id="displayName" placeholder="Display name" />
       <input id="email" type="email" placeholder="Email" />
       <input id="password" type="password" placeholder="Password" />
-      <input id="avatarFile" type="file" accept="image/*" />
       <button id="signupBtn">Sign Up</button>
       <div class="small">Already have an account? <a href="login.html">Log in</a></div>
     </div>
   </main>
-  <script type="module" src="auth.js"></script>
+
+  <script type="module">
+    import { createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    import { auth, db } from "./firebase.js";
+    import { setDoc, doc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+    import "./auth.js";
+
+    const displayNameEl = document.getElementById('displayName');
+    const emailEl = document.getElementById('email');
+    const passEl = document.getElementById('password');
+    const signupBtn = document.getElementById('signupBtn');
+
+    signupBtn.addEventListener('click', async () => {
+      try {
+        signupBtn.disabled = true;
+        signupBtn.textContent = 'Creating...';
+        const cred = await createUserWithEmailAndPassword(auth, emailEl.value, passEl.value);
+        await updateProfile(cred.user, { displayName: displayNameEl.value || emailEl.value });
+        await setDoc(doc(db, 'users', cred.user.uid), { displayName: displayNameEl.value||'', email: emailEl.value, isBanned:false });
+      } catch (e) {
+        alert('Sign-up failed: ' + (e.message || e.code));
+      } finally {
+        signupBtn.disabled = false;
+        signupBtn.textContent = 'Sign Up';
+      }
+    });
+  </script>
 </body>
 </html>

@@ -1,7 +1,11 @@
 <!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Login - Friends Chat</title>
-<link rel="stylesheet" href="style.css"></head>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Login - Friends Chat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
   <main class="auth-page">
     <h2>Log in</h2>
@@ -12,6 +16,28 @@
       <div class="small">New? <a href="signup.html">Sign up</a></div>
     </div>
   </main>
-  <script type="module" src="auth.js"></script>
+
+  <script type="module">
+    import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    import { auth } from "./firebase.js";
+    import "./auth.js";
+
+    const emailEl = document.getElementById('email');
+    const passEl = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+
+    loginBtn.addEventListener('click', async () => {
+      try {
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'Logging in...';
+        await signInWithEmailAndPassword(auth, emailEl.value, passEl.value);
+      } catch (e) {
+        alert('Login failed: ' + (e.message || e.code));
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Log In';
+      }
+    });
+  </script>
 </body>
 </html>

@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Friends Chat — WhatsApp Style (Rooms)</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Friends Chat</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -29,8 +29,7 @@
         <div class="chat-title" id="chatTitle">Select a room</div>
         <div class="user-area" id="userArea">
           <span id="userName"></span>
-          <button id="signOutBtn" style="display:none;">Sign out</button>
-          <a href="login.html" id="loginLink">Log in</a>
+          <button id="logoutBtn" style="display:none;">Sign out</button>
         </div>
       </header>
 
@@ -48,5 +47,6 @@
   </div>
 
   <script type="module" src="app.js"></script>
+  <script type="module" src="auth.js"></script>
 </body>
 </html>
