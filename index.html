@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Friends Chat — WhatsApp Style (Rooms)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="header">
+        <div class="brand">Friends Chat</div>
+        <div class="small">Rooms</div>
+      </div>
+      <div class="rooms-control">
+        <input id="newRoomName" placeholder="New room name" />
+        <button id="createRoomBtn">Create Room</button>
+      </div>
+      <div id="roomsList" class="rooms-list"></div>
+      <div class="users-panel">
+        <div class="panel-title">Online users</div>
+        <div id="usersList" class="users-list"></div>
+      </div>
+    </aside>
+
+    <main class="chat" id="chat">
+      <header class="chat-header">
+        <div class="chat-title" id="chatTitle">Select a room</div>
+        <div class="user-area" id="userArea">
+          <span id="userName"></span>
+          <button id="signOutBtn" style="display:none;">Sign out</button>
+          <a href="login.html" id="loginLink">Log in</a>
+        </div>
+      </header>
+
+      <div id="authNotice" class="auth-notice">Please sign up or log in to chat. <a href="signup.html">Sign up</a> / <a href="login.html">Log in</a></div>
+
+      <div id="messages" class="messages" aria-live="polite"></div>
+
+      <form id="sendForm" class="input-area" style="display:none;">
+        <input id="txt" type="text" placeholder="Type a message" autocomplete="off" required />
+        <input id="fileInput" type="file" style="display:none;" />
+        <button type="button" id="attachBtn">📎</button>
+        <button type="submit" id="sendBtn">Send</button>
+      </form>
+    </main>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
