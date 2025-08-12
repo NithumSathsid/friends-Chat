@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
@@ -7,46 +7,32 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app">
-    <aside class="sidebar" id="sidebar">
-      <div class="header">
-        <div class="brand">Friends Chat</div>
-        <div class="small">Rooms</div>
+  <div class="split-app">
+    <div class="left-panel">
+      <div class="panel-section rooms-section">
+        <div class="panel-header"><strong>Rooms</strong> <button id="newRoomBtn" title="New">+</button></div>
+        <div class="rooms-list" id="roomsList"></div>
       </div>
-      <div class="rooms-control">
-        <input id="newRoomName" placeholder="New room name" />
-        <button id="createRoomBtn">Create Room</button>
+      <div class="panel-section users-section">
+        <div class="panel-header"><strong>Users</strong></div>
+        <div class="users-list" id="usersList"></div>
       </div>
-      <div id="roomsList" class="rooms-list"></div>
-      <div class="users-panel">
-        <div class="panel-title">Online users</div>
-        <div id="usersList" class="users-list"></div>
-      </div>
-    </aside>
+    </div>
 
-    <main class="chat" id="chat">
+    <div class="right-panel">
       <header class="chat-header">
-        <div class="chat-title" id="chatTitle">Select a room</div>
-        <div class="user-area" id="userArea">
-          <span id="userName"></span>
-          <button id="logoutBtn" style="display:none;">Sign out</button>
-        </div>
+        <div id="chatTitle">Select a room or user</div>
+        <div class="user-area"><span id="userName"></span> <button id="logoutBtn" style="display:none;">Sign out</button></div>
       </header>
-
-      <div id="authNotice" class="auth-notice">Please sign up or log in to chat. <a href="signup.html">Sign up</a> / <a href="login.html">Log in</a></div>
-
-      <div id="messages" class="messages" aria-live="polite"></div>
-
+      <div id="messages" class="messages"></div>
       <form id="sendForm" class="input-area" style="display:none;">
         <input id="txt" type="text" placeholder="Type a message" autocomplete="off" required />
-        <input id="fileInput" type="file" style="display:none;" />
-        <button type="button" id="attachBtn">📎</button>
-        <button type="submit" id="sendBtn">Send</button>
+        <button type="submit">Send</button>
       </form>
-    </main>
+    </div>
   </div>
 
-  <script type="module" src="app.js"></script>
-  <script type="module" src="auth.js"></script>
+<script type="module" src="app.js"></script>
+<script type="module" src="auth.js"></script>
 </body>
 </html>

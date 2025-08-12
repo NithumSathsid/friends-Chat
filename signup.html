@@ -1,10 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Sign Up - Friends Chat</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sign Up - Friends Chat</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="auth-page">
@@ -23,25 +22,18 @@
     import { auth, db } from "./firebase.js";
     import { setDoc, doc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
     import "./auth.js";
-
     const displayNameEl = document.getElementById('displayName');
     const emailEl = document.getElementById('email');
     const passEl = document.getElementById('password');
     const signupBtn = document.getElementById('signupBtn');
-
     signupBtn.addEventListener('click', async () => {
       try {
-        signupBtn.disabled = true;
-        signupBtn.textContent = 'Creating...';
+        signupBtn.disabled = true; signupBtn.textContent = 'Creating...';
         const cred = await createUserWithEmailAndPassword(auth, emailEl.value, passEl.value);
         await updateProfile(cred.user, { displayName: displayNameEl.value || emailEl.value });
-        await setDoc(doc(db, 'users', cred.user.uid), { displayName: displayNameEl.value||'', email: emailEl.value, isBanned:false });
-      } catch (e) {
-        alert('Sign-up failed: ' + (e.message || e.code));
-      } finally {
-        signupBtn.disabled = false;
-        signupBtn.textContent = 'Sign Up';
-      }
+        await setDoc(doc(db,'users',cred.user.uid), { displayName: displayNameEl.value||'', email: emailEl.value, isBanned:false });
+      } catch (e) { alert('Sign-up failed: '+(e.message||e.code)); }
+      finally { signupBtn.disabled = false; signupBtn.textContent = 'Sign Up'; }
     });
   </script>
 </body>
