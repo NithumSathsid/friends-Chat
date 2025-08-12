@@ -1,10 +1,14 @@
 ﻿<!doctype html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Login - Friends Chat</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Quick override so nothing hides the button while debugging */
+    #loginBtn { display:inline-block !important; }
+  </style>
 </head>
 <body>
   <main class="auth-page">
@@ -14,6 +18,7 @@
       <input id="password" type="password" placeholder="Password" />
       <button id="loginBtn">Log In</button>
       <div class="small">New? <a href="signup.html">Sign up</a></div>
+      <div id="debug" style="margin-top:10px;color:#b00;font-size:13px;"></div>
     </div>
   </main>
 
@@ -21,14 +26,30 @@
     import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
     import { auth } from "./firebase.js";
     import "./auth.js";
+
     const emailEl = document.getElementById('email');
     const passEl = document.getElementById('password');
     const loginBtn = document.getElementById('loginBtn');
+    const debug = document.getElementById('debug');
+
     loginBtn.addEventListener('click', async () => {
-      try { loginBtn.disabled = true; loginBtn.textContent = 'Logging in...'; await signInWithEmailAndPassword(auth, emailEl.value, passEl.value); }
-      catch (e) { alert('Login failed: '+(e.message||e.code)); }
-      finally { loginBtn.disabled = false; loginBtn.textContent = 'Log In'; }
+      debug.textContent = '';
+      try {
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'Logging in...';
+        await signInWithEmailAndPassword(auth, emailEl.value, passEl.value);
+        // successful sign-in will redirect via auth.js
+      } catch (e) {
+        debug.textContent = 'Login failed: ' + (e.message || e.code);
+        console.error('Login error', e);
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Log In';
+      }
     });
+
+    // show button exists for debugging
+    console.log('login page loaded — loginBtn found:', !!loginBtn);
   </script>
 </body>
 </html>

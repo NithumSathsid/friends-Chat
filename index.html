@@ -1,55 +1,38 @@
 ﻿<!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Login - Friends Chat</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Friends Chat</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    /* Quick override so nothing hides the button while debugging */
-    #loginBtn { display:inline-block !important; }
-  </style>
 </head>
 <body>
-  <main class="auth-page">
-    <h2>Log in</h2>
-    <div class="auth-box">
-      <input id="email" type="email" placeholder="Email" />
-      <input id="password" type="password" placeholder="Password" />
-      <button id="loginBtn">Log In</button>
-      <div class="small">New? <a href="signup.html">Sign up</a></div>
-      <div id="debug" style="margin-top:10px;color:#b00;font-size:13px;"></div>
+  <div class="split-app">
+    <div class="left-panel">
+      <div class="panel-section rooms-section">
+        <div class="panel-header"><strong>Rooms</strong> <button id="newRoomBtn" title="New">+</button></div>
+        <div class="rooms-list" id="roomsList"></div>
+      </div>
+      <div class="panel-section users-section">
+        <div class="panel-header"><strong>Users</strong></div>
+        <div class="users-list" id="usersList"></div>
+      </div>
     </div>
-  </main>
 
-  <script type="module">
-    import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-    import { auth } from "./firebase.js";
-    import "./auth.js";
+    <div class="right-panel">
+      <header class="chat-header">
+        <div id="chatTitle">Select a room or user</div>
+        <div class="user-area"><span id="userName"></span> <button id="logoutBtn" style="display:none;">Sign out</button></div>
+      </header>
+      <div id="messages" class="messages"></div>
+      <form id="sendForm" class="input-area" style="display:none;">
+        <input id="txt" type="text" placeholder="Type a message" autocomplete="off" required />
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
 
-    const emailEl = document.getElementById('email');
-    const passEl = document.getElementById('password');
-    const loginBtn = document.getElementById('loginBtn');
-    const debug = document.getElementById('debug');
-
-    loginBtn.addEventListener('click', async () => {
-      debug.textContent = '';
-      try {
-        loginBtn.disabled = true;
-        loginBtn.textContent = 'Logging in...';
-        await signInWithEmailAndPassword(auth, emailEl.value, passEl.value);
-        // successful sign-in will redirect via auth.js
-      } catch (e) {
-        debug.textContent = 'Login failed: ' + (e.message || e.code);
-        console.error('Login error', e);
-      } finally {
-        loginBtn.disabled = false;
-        loginBtn.textContent = 'Log In';
-      }
-    });
-
-    // show button exists for debugging
-    console.log('login page loaded — loginBtn found:', !!loginBtn);
-  </script>
+<script type="module" src="app.js"></script>
+<script type="module" src="auth.js"></script>
 </body>
 </html>
