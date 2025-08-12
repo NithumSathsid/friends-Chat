@@ -1,40 +1,143 @@
 ﻿<!doctype html>
 <html>
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Sign Up - Friends Chat</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Sign Up - Friends Chat</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="auth-page">
-    <h2>Create account</h2>
-    <div class="auth-box">
-      <input id="displayName" placeholder="Display name" />
-      <input id="email" type="email" placeholder="Email" />
-      <input id="password" type="password" placeholder="Password" />
-      <button id="signupBtn">Sign Up</button>
-      <div class="small">Already have an account? <a href="login.html">Log in</a></div>
+  <script type="module" src="gate.js"></script>
+
+  <div class="auth-page fv">
+    <div class="auth-box fv">
+      <header class="auth-header">
+        <div class="auth-title">Create account</div>
+        <div class="auth-subtitle">Join Friends Chat</div>
+      </header>
+
+      <form class="auth-form" onsubmit="return false;">
+        <div class="input-group">
+          <label for="suName">Name</label>
+          <div class="input-with-icon">
+            <span class="icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M5 18c0-2.21 3.13-4 7-4s7 1.79 7 4" stroke="currentColor" stroke-width="1.5"/></svg>
+            </span>
+            <input id="suName" type="text" placeholder="Your name" required />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="suEmail">Email</label>
+          <div class="input-with-icon">
+            <span class="icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/></svg>
+            </span>
+            <input id="suEmail" type="email" placeholder="you@example.com" required />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="suPass">Password</label>
+          <div class="input-with-icon">
+            <span class="icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 10V7a4 4 0 1 1 8 0v3" stroke="currentColor" stroke-width="1.5"/></svg>
+            </span>
+            <input id="suPass" type="password" placeholder="Create a password" required />
+            <button type="button" class="toggle-pass" data-target="suPass" aria-label="Show password">👁</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="suCode">Access Code</label>
+          <div class="input-with-icon">
+            <span class="icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 10V14M7 7.5V5C7 3.89543 7.89543 3 9 3H15C16.1046 3 17 3.89543 17 5V7.5M5 21H19C20.1046 21 21 20.1046 21 19V10C21 8.89543 20.1046 8 19 8H5C3.89543 8 3 8.89543 3 10V19C3 20.1046 3.89543 21 5 21Z" stroke="currentColor" stroke-width="1.5"/></svg>
+            </span>
+            <input id="suCode" type="text" placeholder="Enter access code" required />
+          </div>
+        </div>
+
+        <div class="auth-actions">
+          <button id="signupBtn" type="button" class="btn btn-primary">Create account</button>
+        </div>
+
+        <div class="auth-links small">
+          Already have an account? <a href="login.html">Sign in</a>
+        </div>
+
+        <div id="suMsg" class="form-msg small" role="alert"></div>
+      </form>
     </div>
-  </main>
+  </div>
 
   <script type="module">
-    import { createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
     import { auth, db } from "./firebase.js";
-    import { setDoc, doc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-    import "./auth.js";
-    const displayNameEl = document.getElementById('displayName');
-    const emailEl = document.getElementById('email');
-    const passEl = document.getElementById('password');
-    const signupBtn = document.getElementById('signupBtn');
-    signupBtn.addEventListener('click', async () => {
+    import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+    const name = document.getElementById('suName');
+    const email = document.getElementById('suEmail');
+    const pass = document.getElementById('suPass');
+    const code = document.getElementById('suCode');
+    const btn = document.getElementById('signupBtn');
+    const msg = document.getElementById('suMsg');
+
+    // Valid access codes - you can add more if needed
+    const validCodes = ["FRIENDS2023", "CHATAPP2023"];
+
+    function show(text, ok=false){
+      msg.textContent = text || '';
+      msg.style.color = ok ? 'var(--success)' : 'var(--danger)';
+    }
+
+    btn?.addEventListener('click', async () => {
+      show('');
+      
+      // Verify access code
+      if (!validCodes.includes(code.value)) {
+        show('Invalid access code. Please try again.');
+        return;
+      }
+      
+      btn.disabled = true;
       try {
-        signupBtn.disabled = true; signupBtn.textContent = 'Creating...';
-        const cred = await createUserWithEmailAndPassword(auth, emailEl.value, passEl.value);
-        await updateProfile(cred.user, { displayName: displayNameEl.value || emailEl.value });
-        await setDoc(doc(db,'users',cred.user.uid), { displayName: displayNameEl.value||'', email: emailEl.value, isBanned:false });
-      } catch (e) { alert('Sign-up failed: '+(e.message||e.code)); }
-      finally { signupBtn.disabled = false; signupBtn.textContent = 'Sign Up'; }
+        // Create the user account
+        const cred = await createUserWithEmailAndPassword(auth, email.value, pass.value);
+        
+        // Save user details in Firestore
+        await setDoc(doc(db, "users", cred.user.uid), {
+          name: name.value,
+          email: email.value,
+          createdAt: new Date()
+        });
+        
+        show('Account created successfully!', true);
+        setTimeout(() => window.location.replace('index.html'), 1000);
+      } catch(e) {
+        console.warn(e);
+        show(e.message || 'Failed to create account. Try again.');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    [name, email, pass, code].forEach(i => i?.addEventListener('keydown', e => { 
+      if (e.key === 'Enter') btn.click(); 
+    }));
+
+    document.querySelectorAll('.toggle-pass').forEach(t => {
+      t.addEventListener('click', ()=>{
+        const id = t.getAttribute('data-target');
+        const input = document.getElementById(id);
+        if (!input) return;
+        const showPw = input.type === 'password';
+        input.type = showPw ? 'text' : 'password';
+        t.textContent = showPw ? '🙈' : '👁';
+        t.setAttribute('aria-label', showPw ? 'Hide password' : 'Show password');
+      });
     });
   </script>
+
+  <script type="module" src="auth.js"></script>
 </body>
 </html>

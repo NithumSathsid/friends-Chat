@@ -1,9 +1,10 @@
-﻿/* firebase.js - your Firebase config (already filled) */
+﻿/* firebase.js - Firebase config + Firestore long-poll optimization */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { initializeFirestore } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
+// Fill with your Firebase project settings
 const firebaseConfig = {
   apiKey: "AIzaSyCBeMA39E2tltkqlC0p0DUQ_ldYJ_m7XIw",
   authDomain: "friend-chat-4c4ff.firebaseapp.com",
@@ -14,7 +15,13 @@ const firebaseConfig = {
   measurementId: "G-4L6KM4Q8QE"
 };
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+
+// Reduce latency on some networks
+export const db = initializeFirestore(app, {
+  experimentalAutoDetectLongPolling: true,
+  useFetchStreams: false
+});
+
 export const storage = getStorage(app);

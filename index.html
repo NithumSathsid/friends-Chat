@@ -9,10 +9,21 @@
 <body>
   <div class="split-app">
     <div class="left-panel">
-      <div class="panel-section rooms-section">
-        <div class="panel-header"><strong>Rooms</strong> <button id="newRoomBtn" title="New">+</button></div>
-        <div class="rooms-list" id="roomsList"></div>
+      <!-- Search -->
+      <div class="panel-header search-header">
+        <input id="searchInput" class="search-input" placeholder="Search groups or users" />
       </div>
+
+      <!-- Groups -->
+      <div class="panel-section groups-section">
+        <div class="panel-header">
+          <strong>Groups</strong>
+          <button id="newGroupBtn" title="New">+</button>
+        </div>
+        <div class="groups-list" id="groupsList"></div>
+      </div>
+
+      <!-- Users -->
       <div class="panel-section users-section">
         <div class="panel-header"><strong>Users</strong></div>
         <div class="users-list" id="usersList"></div>
@@ -21,18 +32,32 @@
 
     <div class="right-panel">
       <header class="chat-header">
-        <div id="chatTitle">Select a room or user</div>
-        <div class="user-area"><span id="userName"></span> <button id="logoutBtn" style="display:none;">Sign out</button></div>
+        <div id="chatTitle">Select a group or user</div>
+        <div class="user-area">
+          <span id="userName"></span>
+          <button id="logoutBtn" style="display:none;">Sign out</button>
+          <a id="loginLink" href="login.html">Sign in</a>
+        </div>
       </header>
+
+      <!-- Attachment preview strip -->
+      <div id="attachPreview" class="attach-preview" style="display:none"></div>
+
       <div id="messages" class="messages"></div>
+      <div id="authNotice" class="small" style="padding:8px 12px;">Please log in to send messages.</div>
+
+      <!-- Send form with attach button -->
       <form id="sendForm" class="input-area" style="display:none;">
+        <button type="button" id="attachBtn" class="attach-btn" title="Attach">📎</button>
+        <input id="fileInput" type="file" multiple style="display:none"
+               accept="image/*,video/*,audio/*,.pdf,.txt,.zip,.doc,.docx" />
         <input id="txt" type="text" placeholder="Type a message" autocomplete="off" required />
         <button type="submit">Send</button>
       </form>
     </div>
   </div>
 
-<script type="module" src="app.js"></script>
-<script type="module" src="auth.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module" src="auth.js"></script>
 </body>
 </html>
